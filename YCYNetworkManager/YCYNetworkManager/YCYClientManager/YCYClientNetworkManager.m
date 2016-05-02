@@ -50,8 +50,7 @@ static dispatch_once_t onceToken;
     NSDictionary *cacheResponseData = [[NSObject loadCacheFileDataWithPath:combinedURL] mutableCopy];
     NSTimeInterval currentTime = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970]*1000;
     
-    if (cacheTimeSeconds > 0 && (cacheResponseData && [cacheResponseData[@"cacheTime"] doubleValue] > currentTime) && (cacheResponseData[@"code"] && [cacheResponseData[@"code"] intValue] == 0)) {
-        NSLog(@"%.0f---%.0f",[cacheResponseData[@"cacheTime"] doubleValue],currentTime);
+    if (cacheTimeSeconds > 0 && (cacheResponseData && [cacheResponseData[@"cacheTime"] doubleValue] > currentTime)) {
         //读取缓存
         block(cacheResponseData,nil);
         return;
@@ -62,7 +61,7 @@ static dispatch_once_t onceToken;
                 NSMutableDictionary *tempDict = [NSMutableDictionary dictionaryWithDictionary:responseObject];
                 //当前时间戳
                 NSTimeInterval cacheExprieTime = [[NSDate dateWithTimeIntervalSinceNow:0] timeIntervalSince1970]*1000+cacheTimeSeconds*1000;
-                //                NSInteger timestap = round(cacheExprieTime);
+                
                 NSString *timestap = [NSString stringWithFormat:@"%.0f",cacheExprieTime];
                 [tempDict setObject:timestap  forKey:@"cacheTime"];
                 //保存到当前缓存文件
